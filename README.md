@@ -1,4 +1,9 @@
-# nette-auto-registrator
+[![Latest Stable Version](https://poser.pugx.org/gamee/nette-auto-registrator/v/stable)](https://packagist.org/packages/gamee/nette-auto-registrator)
+[![License](https://poser.pugx.org/gamee/nette-auto-registrator/license)](https://packagist.org/packages/gamee/nette-auto-registrator)
+[![Total Downloads](https://poser.pugx.org/gamee/nette-auto-registrator/downloads)](https://packagist.org/packages/gamee/nette-auto-registrator)
+[![Build Status](https://travis-ci.org/gameeapp/nette-auto-registrator.svg?branch=master)](https://travis-ci.org/gameeapp/nette-auto-registrator)
+
+# gamee/nette-auto-registrator
 
 Using this extension, you don't have to list all classes in neon config. This extension will automatically register all classes for you.
 
