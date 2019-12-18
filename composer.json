@@ -1,6 +1,14 @@
 {
 	"name": "gamee/nette-auto-registrator",
+	"description": "Automatically register all found classes into DIC",
 	"type": "library",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Pavel Janda",
+			"email": "me@paveljanda.com"
+		}
+	],
 	"autoload": {
 		"psr-4": {
 			"Gamee\\AutoRegistrator\\": [
@@ -9,6 +17,7 @@
 		}
 	},
 	"require": {
+		"php": ">=7.1",
 		"nette/di": "^3.0",
 		"symfony/finder": "~4.4"
 	},

@@ -14,7 +14,7 @@ composer require gamee/nette-auto-registrator
 
 ```
 extensions:
-	autoRegistrator: AL\AutoRegistrator\DI\AutoRegistratorExtension
+	autoRegistrator: Gamee\AutoRegistrator\DI\AutoRegistratorExtension
 
 autoRegistrator:
 	skipDirs:
