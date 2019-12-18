@@ -1,0 +1,12 @@
+language: php
+
+php:
+  - 7.3
+
+install:
+  - composer install -a --no-interaction --prefer-source
+
+script:
+  - composer tests
+  - composer phpstan
+  - composer phpcs
