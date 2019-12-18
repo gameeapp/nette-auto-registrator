@@ -20,7 +20,7 @@ final class AutoRegistratorExtension extends CompilerExtension
 	private $defaults = [
 		'scanDirs' => [],
 		'skipDirs' => [
-			'Exception'
+			'Exception',
 		],
 		'skipFilesPatterns' => [],
 		'skipClasses' => [],
