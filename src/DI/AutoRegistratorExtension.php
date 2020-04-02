@@ -14,10 +14,7 @@ use Symfony\Component\Finder\Finder;
 final class AutoRegistratorExtension extends CompilerExtension
 {
 
-	/**
-	 * @var array
-	 */
-	private $defaults = [
+	private array $defaults = [
 		'scanDirs' => [],
 		'skipDirs' => [
 			'Exception',
