@@ -19,7 +19,7 @@
 	"require": {
 		"php": ">=7.1",
 		"nette/di": "^3.0",
-		"symfony/finder": "~4.4"
+		"symfony/finder": "~4.4 | ^5.0"
 	},
 	"require-dev": {
 		"gamee/php-code-checker-rules": "^2.0"
