@@ -84,6 +84,10 @@ final class AutoRegistratorExtension extends CompilerExtension
 					continue;
 				}
 
+				if (is_subclass_of($fullClassName, \Throwable::class)) {
+					continue;
+				}
+
 				$this->getContainerBuilder()->addDefinition($this->prefix(lcfirst($className)))
 					->setFactory($fullClassName);
 			}
