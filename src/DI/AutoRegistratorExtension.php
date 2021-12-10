@@ -16,12 +16,25 @@ final class AutoRegistratorExtension extends CompilerExtension
 
 	private array $defaults = [
 		'scanDirs' => [],
-		'skipDirs' => [
-			'Exception',
-		],
+		'skipDirs' => [],
 		'skipFilesPatterns' => [],
 		'skipClasses' => [],
+		'skipSubclassesOf' => [
+			\Throwable::class,
+		],
 	];
+
+
+	public static function configure(
+		Compiler $compiler,
+		array $config
+	): void
+	{
+		$extension = new self;
+		$extension->setCompiler($compiler, 'autoRegistrator');
+		$extension->setConfig($config);
+		$extension->loadConfiguration();
+	}
 
 
 	public function loadConfiguration(): void
@@ -84,25 +97,15 @@ final class AutoRegistratorExtension extends CompilerExtension
 					continue;
 				}
 
-				if (is_subclass_of($fullClassName, \Throwable::class)) {
-					continue;
+				foreach ($this->config['skipSubclassesOf'] as $subclassOf) {
+					if (is_subclass_of($fullClassName, $subclassOf)) {
+						continue 2;
+					}
 				}
 
 				$this->getContainerBuilder()->addDefinition($this->prefix(lcfirst($className)))
 					->setFactory($fullClassName);
 			}
 		}
-	}
-
-
-	public static function configure(
-		Compiler $compiler,
-		array $config
-	): void
-	{
-		$extension = new static;
-		$extension->setCompiler($compiler, 'autoRegistrator');
-		$extension->setConfig($config);
-		$extension->loadConfiguration();
 	}
 }
