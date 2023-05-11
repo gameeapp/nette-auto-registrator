@@ -13,99 +13,98 @@ use Symfony\Component\Finder\Finder;
  */
 final class AutoRegistratorExtension extends CompilerExtension
 {
-
-	private array $defaults = [
-		'scanDirs' => [],
-		'skipDirs' => [],
-		'skipFilesPatterns' => [],
-		'skipClasses' => [],
-		'skipSubclassesOf' => [
-			\Throwable::class,
-		],
-	];
-
-
-	public static function configure(
-		Compiler $compiler,
-		array $config
-	): void
-	{
-		$extension = new self;
-		$extension->setCompiler($compiler, 'autoRegistrator');
-		$extension->setConfig($config);
-		$extension->loadConfiguration();
-	}
+    private array $defaults = [
+        'scanDirs' => [],
+        'skipDirs' => [],
+        'skipFilesPatterns' => [],
+        'skipClasses' => [],
+        'skipSubclassesOf' => [
+            \Throwable::class,
+        ],
+    ];
 
 
-	public function loadConfiguration(): void
-	{
-		$this->validateConfig($this->defaults);
+    public static function configure(
+        Compiler $compiler,
+        array $config,
+    ): void
+    {
+        $extension = new self;
+        $extension->setCompiler($compiler, 'autoRegistrator');
+        $extension->setConfig($config);
+        $extension->loadConfiguration();
+    }
 
-		foreach ($this->config['scanDirs'] as $dir) {
-			$files = (new Finder)
-				->files()
-				->name('/[A-Z][a-zA-Z0-9]+\.php$/')
-				->notName($this->config['skipFilesPatterns'])
-				->exclude($this->config['skipDirs'])
-				->in($dir);
 
-			foreach ($files as $file) {
-				$handle = fopen((string) $file->getRealPath(), 'r');
+    public function loadConfiguration(): void
+    {
+        $this->validateConfig($this->defaults);
 
-				if ($handle === false) {
-					continue;
-				}
+        foreach ($this->config['scanDirs'] as $dir) {
+            $files = (new Finder)
+                ->files()
+                ->name('/[A-Z][a-zA-Z0-9]+\.php$/')
+                ->notName($this->config['skipFilesPatterns'])
+                ->exclude($this->config['skipDirs'])
+                ->in($dir);
 
-				$namespace = null;
-				$className = null;
+            foreach ($files as $file) {
+                $handle = \fopen((string) $file->getRealPath(), 'r');
 
-				while ($line = fgets($handle)) {
-					if (strpos($line, 'namespace ') === 0) {
-						$namespace = substr($line, 10, strlen($line) - 12);
-					} else {
-						$classPosition = strpos($line, 'class ');
+                if ($handle === false) {
+                    continue;
+                }
 
-						if ($classPosition !== false) {
-							if (strpos($line, 'abstract class') !== false) {
-								break;
-							}
+                $namespace = null;
+                $className = null;
 
-							$className = substr(
-								$line,
-								(6 + $classPosition),
-								strlen($line) - (6 + $classPosition + 1)
-							);
-						}
-					}
+                while ($line = \fgets($handle)) {
+                    if (str_starts_with($line, 'namespace ')) {
+                        $namespace = \substr($line, 10, \strlen($line) - 12);
+                    } else {
+                        $classPosition = \strpos($line, 'class ');
 
-					if (($line[0] ?? '') === '{') {
-						break;
-					}
-				}
+                        if ($classPosition !== false) {
+                            if (str_contains($line, 'abstract class')) {
+                                break;
+                            }
 
-				fclose($handle);
+                            $className = \substr(
+                                $line,
+                                (6 + $classPosition),
+                                \strlen($line) - (6 + $classPosition + 1),
+                            );
+                        }
+                    }
 
-				if ($className === null || $namespace === null) {
-					continue;
-				}
+                    if (($line[0] ?? '') === '{') {
+                        break;
+                    }
+                }
 
-				$className = explode(' ', $className)[0];
+                \fclose($handle);
 
-				$fullClassName = $namespace . '\\' . $className;
+                if ($className === null || $namespace === null) {
+                    continue;
+                }
 
-				if (in_array($fullClassName, $this->config['skipClasses'], true)) {
-					continue;
-				}
+                $className = \explode(' ', $className)[0];
 
-				foreach ($this->config['skipSubclassesOf'] as $subclassOf) {
-					if (is_subclass_of($fullClassName, $subclassOf)) {
-						continue 2;
-					}
-				}
+                $fullClassName = $namespace . '\\' . $className;
 
-				$this->getContainerBuilder()->addDefinition($this->prefix(lcfirst($className)))
-					->setFactory($fullClassName);
-			}
-		}
-	}
+                if (\in_array($fullClassName, $this->config['skipClasses'], true)) {
+                    continue;
+                }
+
+                foreach ($this->config['skipSubclassesOf'] as $subclassOf) {
+                    if (\is_subclass_of($fullClassName, $subclassOf)) {
+                        continue 2;
+                    }
+                }
+
+                $this->getContainerBuilder()->addDefinition($this->prefix(\lcfirst($className)))
+                    ->setFactory($fullClassName);
+            }
+        }
+    }
 }
