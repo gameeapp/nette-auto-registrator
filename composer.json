@@ -17,17 +17,22 @@
 		}
 	},
 	"require": {
-		"php": ">=7.4",
+		"php": ">=8.0",
 		"nette/di": "^3.0",
-		"symfony/finder": "~4.4 | ^5.0"
+		"symfony/finder": "^5.0 | ^6.0"
 	},
 	"require-dev": {
-		"gamee/php-code-checker-rules": "^2.0"
+		"gamee/php-code-checker-rules": "^4.0"
 	},
 	"scripts": {
 		"phpstan": "vendor/bin/phpstan analyse src -c vendor/gamee/php-code-checker-rules/phpstan.neon --level 8",
 		"phpcs": "vendor/bin/phpcs --standard=vendor/gamee/php-code-checker-rules/ruleset.xml --extensions=php,phpt --tab-width=4 --ignore=temp -sp src"
 	},
 	"minimum-stability": "dev",
-	"prefer-stable": true
+	"prefer-stable": true,
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": false
+		}
+	}
 }
