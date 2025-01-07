@@ -19,10 +19,10 @@
 	"require": {
 		"php": ">=8.2",
 		"nette/di": "^3.2",
-		"symfony/finder": "^7.1"
+		"symfony/finder": "^7.2"
 	},
 	"require-dev": {
-		"gamee/php-code-checker-rules": "^v4.1"
+		"gamee/php-code-checker-rules": "^v5.0"
 	},
 	"scripts": {
 		"phpstan": "vendor/bin/phpstan analyse src -c vendor/gamee/php-code-checker-rules/phpstan.neon --level 8",

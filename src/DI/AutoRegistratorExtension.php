@@ -49,7 +49,7 @@ final class AutoRegistratorExtension extends CompilerExtension
                 ->in($dir);
 
             foreach ($files as $file) {
-                $handle = \fopen((string) $file->getRealPath(), 'r');
+                $handle = \fopen((string) $file->getRealPath(), 'rb');
 
                 if ($handle === false) {
                     continue;
@@ -60,12 +60,12 @@ final class AutoRegistratorExtension extends CompilerExtension
 
                 while ($line = \fgets($handle)) {
                     if (str_starts_with($line, 'namespace ')) {
-                        $namespace = \substr($line, 10, \strlen($line) - 12);
+                        $namespace = \substr($line, 10, -2);
                     } else {
                         $classPosition = \strpos($line, 'class ');
 
                         if ($classPosition !== false) {
-                            if (str_contains($line, 'abstract class')) {
+                            if (str_contains($line, 'abstract ')) {
                                 break;
                             }
 
